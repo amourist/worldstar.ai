@@ -59,7 +59,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Content-Type: application/json',
     'Authorization: Bearer ' . $openai_api_key,
-    'HTTP-Referer: http://worldstar.gt.tc' // Direkomendasikan OpenRouter
+    'HTTP-Referer: https://worldstarai-production.up.railway.app/' // Direkomendasikan OpenRouter
 ]);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
