@@ -1,0 +1,725 @@
+/* ========================================== */
+/* 0. ROOT & RESET */
+/* ========================================== */
+
+:root {
+    /* Mode Terang (Default) */
+    --color-background-main: #f0f2f5;        /* Background Area Input & Border */
+    --color-background-sidebar: #ffffff;     /* Background Sidebar */
+    --color-background-chat: #e9ebee;        /* Background Area Chat */
+    --color-background-input: #ffffff;
+    --color-text-primary: #1c1e21;           /* Teks utama */
+    --color-text-secondary: #606770;         /* Teks sekunder, disclaimer */
+    --color-primary: #108cff;                /* Warna Aksi (Tombol, Link) */
+    --color-primary-hover: #007bff;
+    --color-user-bubble: #108cff;            /* Bubble user */
+    --color-ai-bubble: #ffffff;              /* Bubble AI */
+    --color-text-user: #ffffff;
+    --color-text-ai: #1c1e21;
+    --color-border: #dddddd;
+    --color-shadow: rgba(0, 0, 0, 0.08);
+
+    --border-radius-base: 12px;
+    --padding-base: 15px;
+}
+
+/* Mode Gelap Overrides */
+body.dark-mode {
+    --color-background-main: #18191a;
+    --color-background-sidebar: #242526;
+    --color-background-chat: #3a3b3c;
+    --color-background-input: #3a3b3c;
+    --color-text-primary: #e4e6eb;
+    --color-text-secondary: #b0b3b8;
+    --color-primary: #00a896; 
+    --color-primary-hover: #008f83;
+    --color-user-bubble: #00a896;
+    --color-ai-bubble: #242526;
+    --color-text-user: #ffffff;
+    --color-text-ai: #e4e6eb;
+    --color-border: #444444;
+    --color-shadow: rgba(0, 0, 0, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-background-main);
+    color: var(--color-text-primary);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* ========================================== */
+/* 1. SIDEBAR & LOGO */
+/* ========================================== */
+
+#sidebar {
+    width: 280px;
+    background-color: var(--color-background-sidebar);
+    color: var(--color-text-primary);
+    padding: var(--padding-base);
+    box-shadow: 2px 0 8px var(--color-shadow);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    height: 40px; 
+}
+
+.app-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* --- Tambahkan kode ini di styles.css --- */
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Jarak antara logo dan teks */
+}
+
+.app-title {
+    font-size: 1.5em; /* Ukuran teks */
+    font-weight: 600;
+    color: var(--color-primary); /* Warna teks sesuai warna utama aplikasi */
+}
+
+#toggle-sidebar-btn {
+    display: none; 
+    background: none;
+    border: none;
+    color: var(--color-text-primary);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.new-chat-btn {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius-base);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.new-chat-btn:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.new-chat-btn i {
+    margin-right: 8px;
+}
+
+.chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 5px; 
+}
+
+.chat-history h4 {
+    margin-bottom: 10px;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+#chat-history-list {
+    list-style: none;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.history-item:hover:not(.active), .history-item.active {
+    background-color: var(--color-background-chat);
+}
+
+.history-item.active {
+    border-left: 3px solid var(--color-primary);
+    padding-left: 7px;
+}
+
+.history-title-text {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.history-actions {
+    display: none; 
+    gap: 5px;
+}
+.history-item:hover .history-actions, .history-item.active .history-actions {
+    display: flex;
+}
+
+.history-action-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 4px;
+    transition: color 0.2s;
+}
+
+.history-action-btn:hover {
+    color: var(--color-primary);
+}
+
+.sidebar-footer {
+    padding-top: var(--padding-base);
+    border-top: 1px solid var(--color-border);
+    margin-top: 10px;
+}
+
+.sidebar-option {
+    display: block;
+    padding: 10px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.sidebar-option i {
+    margin-right: 10px;
+    width: 15px; 
+    text-align: center;
+}
+
+.sidebar-option:hover {
+    background-color: var(--color-background-chat);
+}
+
+/* ========================================== */
+/* 2. MAIN CONTENT & HEADER */
+/* ========================================== */
+
+#main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+header {
+    background-color: var(--color-background-sidebar);
+    padding: 15px 25px;
+    box-shadow: 0 2px 5px var(--color-shadow);
+    display: flex;
+    align-items: center;
+    z-index: 50;
+    min-height: 60px;
+}
+
+header h2 {
+    font-size: 18px;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#open-sidebar-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 15px;
+    display: none; 
+}
+
+.model-display {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    padding: 5px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+}
+
+/* ========================================== */
+/* 3. CHAT AREA & PAGES (PERBAIKAN KRITIS) */
+/* ========================================== */
+
+#chat-area {
+    flex-grow: 1;
+    overflow: hidden; 
+    background-color: var(--color-background-chat);
+    position: relative;
+}
+
+.page {
+    /* Absolute positioning untuk menumpuk halaman */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: var(--color-background-chat); /* Agar tidak transparan */
+    
+    /* Perbaikan Tumpang Tindih: opacity dan pointer-events */
+    display: block; /* Harus 'block' agar transition bekerja */
+    opacity: 0;
+    pointer-events: none; /* Menonaktifkan klik pada halaman yang tidak aktif */
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1;
+}
+
+.page.active {
+    /* Hanya halaman aktif yang terlihat dan bisa diklik */
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+/* Welcome Page Styling */
+#welcome-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-content {
+    text-align: center;
+    max-width: 800px;
+    padding-bottom: 50px; 
+}
+
+.welcome-logo {
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.welcome-content h1 {
+    font-size: 3em;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+}
+
+.welcome-content p {
+    font-size: 1.2em;
+    color: var(--color-text-secondary);
+    margin-bottom: 40px;
+}
+
+.prompt-cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.prompt-card {
+    background-color: var(--color-background-input);
+    padding: 15px;
+    border-radius: var(--border-radius-base);
+    border: 1px solid var(--color-border);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.prompt-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 10px var(--color-shadow);
+}
+
+.prompt-card h3 {
+    font-size: 16px;
+    color: var(--color-primary);
+    margin-bottom: 5px;
+}
+
+.prompt-card p {
+    font-size: 14px;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+/* About Page Styling */
+.about-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.about-content h2 {
+    color: var(--color-primary);
+    margin-bottom: 20px;
+}
+
+.about-content h3 {
+    margin-top: 20px;
+    color: var(--color-text-primary);
+}
+
+.about-content ul {
+    margin-left: 20px;
+    padding: 10px 0;
+    color: var(--color-text-secondary);
+}
+
+/* Conversation Styling */
+#conversation-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px; 
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+.chat-message {
+    display: flex;
+}
+
+.chat-message.user {
+    justify-content: flex-end;
+}
+
+.chat-message.ai {
+    justify-content: flex-start;
+}
+
+.bubble {
+    padding: 12px 18px;
+    border-radius: 20px;
+    max-width: 80%;
+    position: relative;
+    white-space: pre-wrap; 
+    
+    /* 🌟🌟 PERBAIKAN BUG OVERFLOW TEKS 🌟🌟 */
+    overflow-wrap: break-word; /* Mencegah kata sangat panjang keluar batas */
+    word-break: break-word;    /* Kompatibilitas browser lama dan pemotongan paksa */
+    
+    box-shadow: 0 1px 2px var(--color-shadow);
+    font-size: 15px;
+}
+
+.bubble.user {
+    background-color: var(--color-user-bubble);
+    color: var(--color-text-user);
+    border-bottom-right-radius: 4px;
+}
+
+.bubble.ai {
+    background-color: var(--color-ai-bubble);
+    color: var(--color-text-ai);
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--color-border);
+}
+
+/* Copy Button */
+.copy-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 5px;
+    padding: 5px 0;
+    display: block;
+    float: right;
+    transition: color 0.2s;
+}
+
+.copy-btn:hover {
+    color: var(--color-primary);
+}
+
+/* Animasi Loading */
+.loading-dots {
+    display: flex;
+    align-items: center;
+    height: 1.2em; 
+}
+
+.loading-dots span {
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-text-secondary);
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+.loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1.0); }
+}
+
+/* ========================================== */
+/* 4. INPUT AREA */
+/* ========================================== */
+
+#input-area {
+    background-color: var(--color-background-main);
+    padding: 20px;
+    box-shadow: 0 -2px 5px var(--color-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 60;
+    flex-shrink: 0;
+}
+
+#chat-form {
+    display: flex;
+    width: 100%;
+    max-width: 800px;
+    background-color: var(--color-background-input);
+    border-radius: var(--border-radius-base);
+    border: 1px solid var(--color-border);
+    padding: 10px;
+    box-shadow: 0 4px 10px var(--color-shadow);
+    align-items: flex-end; 
+}
+
+#prompt-input {
+    flex-grow: 1;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    padding: 5px 10px;
+    max-height: 200px;
+    background-color: var(--color-background-input);
+    color: var(--color-text-primary);
+    outline: none;
+    overflow-y: auto;
+}
+
+#send-btn {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-left: 10px;
+    flex-shrink: 0;
+    height: 40px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#send-btn:hover:not([disabled]) {
+    background-color: var(--color-primary-hover);
+}
+
+#send-btn:disabled {
+    background-color: var(--color-text-secondary);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.disclaimer {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: 10px;
+}
+
+/* ========================================== */
+/* 5. DIALOGS */
+/* ========================================== */
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialog-overlay.visible {
+    display: flex;
+}
+
+.dialog-content {
+    background-color: var(--color-background-sidebar);
+    padding: 25px;
+    border-radius: var(--border-radius-base);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 400px;
+}
+
+.dialog-content h3 {
+    margin-bottom: 15px;
+    color: var(--color-primary);
+}
+
+#rename-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: var(--color-background-input);
+    color: var(--color-text-primary);
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.dialog-actions button {
+    padding: 8px 15px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dialog-actions #cancel-rename-btn {
+    background-color: transparent;
+    color: var(--color-text-secondary);
+}
+
+.dialog-actions #confirm-rename-btn {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.dialog-actions #confirm-rename-btn:hover {
+    background-color: var(--color-primary-hover);
+}
+
+
+/* ========================================== */
+/* 6. RESPONSIVE / MOBILE LAYOUT */
+/* ========================================== */
+
+@media (max-width: 768px) {
+    
+    body {
+        display: block; 
+    }
+    
+    #main-content {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* Sidebar Mobile (Overlay) */
+    #sidebar {
+        position: fixed;
+        left: -280px; 
+        height: 100%;
+        transition: left 0.3s ease-in-out;
+        z-index: 200;
+        box-shadow: none; /* Hilangkan shadow saat overlay */
+    }
+    
+    #sidebar.open {
+        left: 0; 
+        box-shadow: 2px 0 8px var(--color-shadow);
+    }
+
+    #toggle-sidebar-btn {
+        display: block; 
+    }
+
+    header {
+        padding: 10px 15px;
+        min-height: 50px;
+    }
+
+    #open-sidebar-btn {
+        display: block; 
+    }
+
+    header h2 {
+        font-size: 16px;
+    }
+
+    .model-display {
+        display: none; 
+    }
+    
+    /* Pages Mobile */
+    #chat-area {
+        padding: 10px;
+    }
+
+    .welcome-content h1 {
+        font-size: 2.5em;
+    }
+
+    .prompt-cards-container {
+        grid-template-columns: 1fr; 
+    }
+    
+    /* Input Mobile */
+    #input-area {
+        padding: 10px;
+    }
+
+    #chat-form {
+        padding: 8px;
+    }
+
+    #prompt-input {
+        padding: 3px 8px;
+        font-size: 15px;
+    }
+
+    #send-btn {
+        padding: 8px 12px;
+        font-size: 16px;
+        height: 36px;
+    }
+}

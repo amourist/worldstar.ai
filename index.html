@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldStar.ai - Robot Chat AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container"> 
+                <img src="robot-logo.png" alt="Ayaa.ai Logo Robot" class="app-logo">
+                <span class="app-title">WorldStar.ai</span>
+            </div>
+            <button id="toggle-sidebar-btn" title="Tutup Menu"><i class="fas fa-times"></i></button>
+        </div>
+
+        <button id="new-chat-btn" class="new-chat-btn">
+            <i class="fas fa-plus"></i> Chat Baru
+        </button>
+
+        <div class="chat-history">
+            <h4>Riwayat Chat</h4>
+            <ul id="chat-history-list">
+                </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="#" class="sidebar-option" id="export-chat-btn">
+                <i class="fas fa-download"></i> Export Chat (.txt)
+            </a>
+            <a href="#" class="sidebar-option" data-page="about">
+                <i class="fas fa-info-circle"></i> Tentang AI
+            </a>
+            <a href="#" class="sidebar-option" id="toggle-dark-mode">
+                <i class="fas fa-moon"></i> Mode Gelap
+            </a>
+            <a href="#" class="sidebar-option" data-page="welcome">
+                <i class="fas fa-home"></i> Kembali ke halaman utama
+            </a>
+        </div>
+    </aside>
+
+    <main id="main-content">
+        <header>
+            <button id="open-sidebar-btn" title="Buka Menu"><i class="fas fa-bars"></i></button>
+            <h2 id="current-chat-title">Chat Baru</h2>
+            <div class="header-info">
+                <span class="model-display">Model: <span id="model-display-name">gpt-5.1-chat (via PHP)</span></span>
+            </div>
+        </header>
+
+        <section id="chat-area">
+            
+            <div id="welcome-page" class="page active">
+                <div class="welcome-content">
+                    <img src="robot-logo.png" alt="Ayaa.ai Robot" class="welcome-logo">
+                    <h1>WorldStar.ai</h1>
+                    <p>Bagaimana saya bisa membantu Anda hari ini?</p>
+
+                    <div class="prompt-cards-container">
+                        <div class="prompt-card" data-prompt="Jelaskan 3 tahap siklus air.">
+                            <h3>Siklus Air</h3>
+                            <p>Jelaskan 3 tahap siklus air.</p>
+                        </div>
+                        <div class="prompt-card" data-prompt="Buatkan kode HTML sederhana untuk halaman login.">
+                            <h3>Buat Kode</h3>
+                            <p>Buatkan kode HTML sederhana untuk halaman login.</p>
+                        </div>
+                        <div class="prompt-card" data-prompt="Apa 5 manfaat olahraga teratur bagi kesehatan?">
+                            <h3>Tips Sehat</h3>
+                            <p>Apa 5 manfaat olahraga teratur bagi kesehatan?</p>
+                        </div>
+                        <div class="prompt-card" data-prompt="Terjemahkan 'Hello, how are you today?' ke Bahasa Indonesia.">
+                            <h3>Terjemahan</h3>
+                            <p>Terjemahkan 'Hello, how are you today?' ke Bahasa Indonesia.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="chat-page" class="page">
+                <div id="conversation-container">
+                    </div>
+            </div>
+
+            <div id="about-page" class="page">
+                <div class="about-content">
+                    <h2>Tentang WorldStar.ai</h2>
+                    <p>WorldStar.ai adalah antarmuka chat AI sederhana yang dibangun menggunakan teknologi Generative AI dari OpenRouter.ai (menggunakan model openai/gpt-5.1-chat).</p>
+                    
+                    <h3>Tujuan Aplikasi:</h3>
+                    <ul>
+                        <li>Menyediakan antarmuka chat yang cepat dan bersih.</li>
+                        <li>Menggunakan server proxy PHP (`chat.php`) untuk **keamanan API Key**.</li>
+                        <li>Menyimpan riwayat chat secara lokal di *browser* Anda.</li>
+                    </ul>
+
+                    <h3>Teknologi yang Digunakan:</h3>
+                    <p>Frontend: HTML, CSS, JavaScript</p>
+                    <p>Backend: PHP (dengan cURL) sebagai proxy API</p>
+                    
+                    <button class="new-chat-btn" data-page="welcome">Mulai Chat Baru</button>
+                </div>
+            </div>
+
+        </section>
+    
+        <section id="input-area">
+            <form id="chat-form">
+                <textarea id="prompt-input" placeholder="Kirim pesan..." rows="1"></textarea>
+                <button id="send-btn" type="submit" disabled><i class="fas fa-paper-plane"></i></button>
+            </form>
+            <p class="disclaimer">WorldStar.ai dapat membuat kesalahan. Pertimbangkan untuk memverifikasi informasi penting.</p>
+        </section>
+    </main>
+    
+    <div id="rename-dialog" class="dialog-overlay">
+        <div class="dialog-content">
+            <h3>Ganti Nama Percakapan</h3>
+            <input type="text" id="rename-input" placeholder="Masukkan nama baru...">
+            <div class="dialog-actions">
+                <button id="cancel-rename-btn">Batal</button>
+                <button id="confirm-rename-btn" class="primary-btn">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
