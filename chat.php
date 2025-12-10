@@ -5,7 +5,7 @@
 
 // ⚠️ WAJIB: GANTI INI DENGAN OPENROUTER API KEY ANDA
 // Kunci ini harus dimulai dengan 'sk-or-v1-'
-$openai_api_key = getenv('OPENROUTER_API_KEY');
+$openai_api_key = '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';
 
 // URL Endpoint OpenRouter
 $api_url = 'https://openrouter.ai/api/v1/chat/completions';
