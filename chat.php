@@ -98,4 +98,3 @@ curl_close($ch);
 
 // Berhasil: Teruskan respons dari API ke frontend
 echo $response;
-?>
