@@ -3,7 +3,7 @@
 // ==========================================
 
 // URL Backend yang akan dipanggil
-const BACKEND_URL = 'chat.php'; 
+const BACKEND_URL = 'https://worldstarai-production.up.railway.app/'; 
 
 // ==========================================
 
