@@ -4,8 +4,7 @@ FROM php:8.2-apache
 # Copy semua file project ke server
 COPY . /var/www/html/
 
-# Install cURL (wajib untuk OpenRouter)
+# Install cURL
 RUN docker-php-ext-install curl
 
-# Buka port 80 supaya bisa diakses di browser
 EXPOSE 80
