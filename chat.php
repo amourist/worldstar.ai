@@ -3,24 +3,17 @@
 // 🔐 CHAT.PHP: FILE BACKEND (PROXY) UNTUK OPENROUTER.AI
 // ==============================================================
 
-// 🛑 PENCEGAHAN AGRESIF 1: Mulai Output Buffering
-// Ini akan menangkap SEMUA output yang dicetak sebelum kode selesai
-ob_start();
-
-// 🛑 PENCEGAHAN AGRESIF 2: Nonaktifkan Semua Error Reporting
-// Error, Notice, atau Warning PHP TIDAK AKAN dicetak dan merusak JSON
-error_reporting(0);
-ini_set('display_errors', 0);
-
-
 // ⚠️ WAJIB: GANTI INI DENGAN OPENROUTER API KEY ANDA
-$openai_api_key = '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'; 
+// Kunci ini harus dimulai dengan 'sk-or-v1-'
+$openai_api_key = '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'; 
 
 // URL Endpoint OpenRouter
 $api_url = 'https://openrouter.ai/api/v1/chat/completions';
+
+// Model yang diminta: openai/gpt-5.1-chat
 $model_name = 'openai/gpt-5.1-chat'; 
 
-// Atur Header CORS dan Content Type
+// Atur CORS
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
@@ -28,9 +21,6 @@ header("Content-Type: application/json");
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(["error" => "Method Not Allowed"]);
-    
-    // 🛑 PENCEGAHAN AGRESIF 3: Bersihkan Buffer dan Kirim Output
-    ob_end_flush();
     exit;
 }
 
@@ -41,7 +31,6 @@ $data = json_decode($json_data, true);
 if (!isset($data['messages']) || !is_array($data['messages'])) {
     http_response_code(400);
     echo json_encode(["error" => "Missing or invalid 'messages' data in request."]);
-    ob_end_flush();
     exit;
 }
 
@@ -50,7 +39,7 @@ $messages_payload = $data['messages'];
 // Tambahkan pesan sistem (System Message)
 array_unshift($messages_payload, [
     "role" => "system", 
-    "content" => "Kamu adalah asisten AI yang membantu, ramah, dan pintar bernama WorldStar.ai. Kamu menggunakan model {$model_name} dari OpenRouter. Jawablah dalam Bahasa Indonesia dan gunakan format Markdown."
+    "content" => "Kamu adalah asisten AI yang membantu, ramah, dan pintar bernama WorldStar.ai Kamu menggunakan model {$model_name} dari OpenRouter. Jawablah dalam Bahasa Indonesia dan gunakan format Markdown."
 ]);
 
 // Siapkan payload untuk API
@@ -63,17 +52,14 @@ $payload = json_encode([
 
 // Inisialisasi cURL
 $ch = curl_init($api_url);
-
-// Set Timeout
+// ... (Jika Anda belum menambahkan timeout, tambahkan di sini)
 curl_setopt($ch, CURLOPT_TIMEOUT, 60);       
 curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Content-Type: application/json',
     'Authorization: Bearer ' . $openai_api_key,
-    // ⚠️ WAJIB GANTI: SESUAIKAN DENGAN DOMAIN ANDA
-    'HTTP-Referer: http://worldstarai-production.up.railway.app' 
+    'HTTP-Referer: http://worldstar.gt.tc' // Direkomendasikan OpenRouter
 ]);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -84,19 +70,27 @@ $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 // Tangani error cURL (kesalahan koneksi)
 if (curl_errno($ch)) {
+    $curl_error_message = curl_error($ch);
     curl_close($ch);
     http_response_code(500);
-    echo json_encode(["error" => "Koneksi Gagal. Mohon cek ketersediaan server atau koneksi internet."]);
-    ob_end_flush();
+    echo json_encode(["error" => "cURL Error: Gagal koneksi ke API. Mohon cek koneksi server Anda atau hubungi penyedia layanan hosting. Pesan: " . $curl_error_message]);
     exit;
 }
 
-// Tangani error API (Key salah, kredit habis, dll.)
+// Tangani error API (Key salah, kredit habis, model tidak tersedia)
 if ($http_code !== 200) {
+    $error_body = json_decode($response, true);
+    
+    $error_message = "Unknown API Error. HTTP Code: {$http_code}.";
+    if (isset($error_body['error']['message'])) {
+        $error_message = $error_body['error']['message'];
+    } elseif (isset($error_body['message'])) {
+        $error_message = $error_body['message'];
+    }
+    
     curl_close($ch);
     http_response_code($http_code);
-    echo json_encode(["error" => "Layanan AI tidak dapat diakses saat ini. Mohon cek API Key dan status layanan OpenRouter. Code: {$http_code}"]);
-    ob_end_flush();
+    echo json_encode(["error" => "OpenRouter Error: {$error_message}"]);
     exit;
 }
 
@@ -104,8 +98,4 @@ curl_close($ch);
 
 // Berhasil: Teruskan respons dari API ke frontend
 echo $response;
-
-// 🛑 PENCEGAHAN AGRESIF 4: Bersihkan Buffer dan Kirim Output
-ob_end_flush();
-
-// 🚫 JANGAN TAMBAH TAG PENUTUP PHP (?>) DI SINI!
+?>
